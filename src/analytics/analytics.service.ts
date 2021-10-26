@@ -24,6 +24,9 @@ export class AnalyticsService {
       ],
       dimensions: [
         {
+          name: 'date',
+        },
+        {
           name: 'firstUserSource',
         },
         {
@@ -38,17 +41,39 @@ export class AnalyticsService {
           name: 'activeUsers',
         },
       ],
+      keepEmptyRows: true,
+      orderBys: [
+        {
+          dimension: {
+            dimensionName: 'date',
+          },
+        },
+      ],
       property: `properties/${this.configService.get<string>('PROPERTY_ID')}`,
     });
+    console.log(
+      rows.map(({ dimensionValues, metricValues }) =>
+        console.log({ dimensionValues, metricValues }),
+      ),
+    );
+    const dateVisitor = rows.map(
+      ({
+        dimensionValues: [{ value: date }],
+        metricValues: [{ value: count }],
+      }) => ({ date, count }),
+    );
     const totalVisitor = sum(
       rows.map(({ metricValues: [{ value }] }) => parseInt(value)),
     );
+    const totalRevisitor = sum(
+      rows.map(({ metricValues: [, { value }] }) => parseInt(value)),
+    );
     const visitPaths = rows.map(
       ({
-        dimensionValues: [{ value: path }],
+        dimensionValues: [, { value: path }],
         metricValues: [{ value: count }],
       }) => ({ path, count }),
     );
-    return { totalVisitor, visitPaths };
+    return { dateVisitor, totalVisitor, totalRevisitor, visitPaths };
   }
 }
