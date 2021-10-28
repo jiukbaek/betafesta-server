@@ -4,9 +4,11 @@ import { BoardModule } from './board/board.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from './config/config.module';
 import { join } from 'path';
+import { DatabaseModule } from './database/Database.module';
 
 @Module({
   imports: [
+    DatabaseModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/public',
