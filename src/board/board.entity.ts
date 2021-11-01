@@ -20,4 +20,7 @@ export class Board {
 
   @OneToMany(() => BoardFile, (boardFile) => boardFile.board)
   files: BoardFile[];
+
+  @Column('text', { nullable: false })
+  title: string;
 }
