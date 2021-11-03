@@ -10,6 +10,9 @@ export class BoardFile {
   board: Board;
 
   @Column('text')
+  filename: string;
+
+  @Column('text')
   originalName: string;
 
   @Column('text')

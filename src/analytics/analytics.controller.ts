@@ -1,4 +1,5 @@
-import { Controller, Get, Inject, Query } from '@nestjs/common';
+import { Controller, Get, Inject, Query, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { AnalyticsService } from './analytics.service';
 
 interface ReportQuery {
@@ -6,6 +7,7 @@ interface ReportQuery {
   endDate: string;
 }
 
+@UseGuards(JwtAuthGuard)
 @Controller('analytics')
 export class AnalyticsController {
   @Inject(AnalyticsService)

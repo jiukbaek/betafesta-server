@@ -6,11 +6,16 @@ import {
   Param,
   Post,
   Put,
+  Res,
   UploadedFile,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { Response } from 'express';
+import { join } from 'path';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { BoardFile } from './board-file.entity';
 import { BoardService } from './board.service';
 
@@ -38,6 +43,7 @@ export class BoardController {
     };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('upload/files')
   @UseInterceptors(FilesInterceptor('files'))
   uploadFiles(
@@ -47,6 +53,7 @@ export class BoardController {
     return this.boardService.uploadBoardFiles({ boardId, files });
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('write')
   writeBoard(@Body() writeArgs: BoardDTO) {
     return this.boardService.writeBoard(writeArgs);
@@ -62,8 +69,18 @@ export class BoardController {
     return this.boardService.getRow(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   editPost(@Param('id') id: number, @Body() editArgs: EditDTO) {
     return this.boardService.edit(id, editArgs);
+  }
+
+  @Get('file/:id')
+  async getFile(@Param('id') id: number, @Res() res: Response) {
+    const file = await this.boardService.getFile(id);
+    return res.download(
+      join(__dirname, '../../public/', file.filename),
+      file.originalName,
+    );
   }
 }

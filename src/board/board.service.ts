@@ -19,6 +19,7 @@ export class BoardService {
     const uploadedFiles = files.map((file: Express.Multer.File) => {
       return getRepository(BoardFile).create({
         board,
+        filename: file.filename,
         filePath: `http://localhost:3000/${file.path}`,
         originalName: file.originalname,
       });
@@ -27,7 +28,7 @@ export class BoardService {
   }
 
   list() {
-    return getRepository(Board).find();
+    return getRepository(Board).find({ order: { id: 'DESC' } });
   }
 
   getRow(id: number) {
@@ -51,5 +52,11 @@ export class BoardService {
       );
     }
     return getRepository(Board).update(id, { title, content });
+  }
+
+  async getFile(id: number): Promise<BoardFile> {
+    const file = await getRepository(BoardFile).findOne(id);
+
+    return file;
   }
 }
