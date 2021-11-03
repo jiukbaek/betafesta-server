@@ -40,7 +40,7 @@ export class BoardController {
   uploadImage(@UploadedFile() file: Express.Multer.File) {
     return {
       sFileName: file.filename,
-      sFileURL: `http://localhost:3000/${file.path}`,
+      sFileURL: `http://betafesta.kr:3000/${file.path}`,
     };
   }
 

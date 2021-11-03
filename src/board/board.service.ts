@@ -40,7 +40,7 @@ export class BoardService {
       return getRepository(BoardFile).create({
         board,
         filename: file.filename,
-        filePath: `http://localhost:3000/${file.path}`,
+        filePath: `http://betafesta.kr:3000/${file.path}`,
         originalName: file.originalname,
       });
     });
