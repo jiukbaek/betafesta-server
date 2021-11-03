@@ -10,7 +10,6 @@ import { Board } from './board.entity';
 export class BoardService {
   writeBoard({ content, title }: BoardDTO) {
     const board = getRepository(Board).create({ content, title });
-    console.log(board);
     return getRepository(Board).save(board);
   }
 
