@@ -6,6 +6,8 @@ import { BoardFile } from './board-file.entity';
 import { BoardDTO, EditDTO } from './board.controller';
 import { Board } from './board.entity';
 
+console.log(process.env);
+
 @Injectable()
 export class BoardService {
   writeBoard({ content, title }: BoardDTO) {
@@ -40,7 +42,7 @@ export class BoardService {
       return getRepository(BoardFile).create({
         board,
         filename: file.filename,
-        filePath: `http://betafesta.kr:3000/${file.path}`,
+        filePath: `${process.env.HOST}/${file.path}`,
         originalName: file.originalname,
       });
     });
