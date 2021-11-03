@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Inject,
   Param,
@@ -73,6 +74,12 @@ export class BoardController {
   @Put(':id')
   editPost(@Param('id') id: number, @Body() editArgs: EditDTO) {
     return this.boardService.edit(id, editArgs);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  deletePost(@Param('id') id: number) {
+    return this.boardService.delete(id);
   }
 
   @Get('file/:id')

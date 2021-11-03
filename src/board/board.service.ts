@@ -13,6 +13,27 @@ export class BoardService {
     return getRepository(Board).save(board);
   }
 
+  async delete(id) {
+    const board = await getRepository(Board).findOne(id);
+    const deleteFiles = await getRepository(BoardFile).find({ board });
+    if (deleteFiles.length) {
+      deleteFiles.forEach((file) =>
+        unlink(
+          join(
+            __dirname,
+            '../../public/',
+            file.filePath.split('/public/').pop(),
+          ),
+          () => null,
+        ),
+      );
+      await getRepository(BoardFile).delete(
+        deleteFiles.map(({ id: fileId }) => fileId),
+      );
+    }
+    return getRepository(Board).delete({ id });
+  }
+
   async uploadBoardFiles({ boardId, files }) {
     const board = await getRepository(Board).findOne(boardId);
     const uploadedFiles = files.map((file: Express.Multer.File) => {
