@@ -51,11 +51,6 @@ export class AnalyticsService {
       ],
       property: `properties/${this.configService.get<string>('PROPERTY_ID')}`,
     });
-    console.log(
-      rows.map(({ dimensionValues, metricValues }) =>
-        console.log({ dimensionValues, metricValues }),
-      ),
-    );
     const dateVisitor = rows.map(
       ({
         dimensionValues: [{ value: date }],
